@@ -37,7 +37,10 @@ global_ns = {
 
     'list': ('list','type'),
     'nil': ('list',["list","'a"]),
-    ":: (list 'a)": ('(fn a => fn b => (a :: b))',["->","'a",["list","'a"],["list","'a"]]),
+    ":: ('a list)": ('(fn a => fn b => (a :: b))',["->","'a",["list","'a"],["list","'a"]]),
+
+    "ref": ("ref","type"),
+    "ref 'a": ('ref',['->',"'a",["ref","'a"]]),
 }
 
 import os
@@ -57,7 +60,7 @@ def type_print( t ):
         return global_ns[t][0]
     elif t[0]=="->": return "("+"->".join(map(type_print,t))+")"
     elif t[0]=="*": return "("+"*".join(map(type_print,t))+")"
-    else: return "("+" ".join(map(type_print,t))+")"
+    else: return "("+" ".join(map(type_print,t[-1:]+t[:-1]))+")"
 def type_apply( l, r ):
     assert isinstance(l,list) and len(l)>=3 and l[0]=="->" and type_unify(l[1],r)!=None, str(l) + " " + str(r)
     if len(l)==3: return type_sub( l[2], type_unify(l[1],r) )
@@ -86,6 +89,7 @@ def type_weaken( t ):
     yield t
     if isinstance(t,list) and len(t)==2:
         yield [t[0],"'a"]
+    yield "'a"
 
 def codeof( sx, ns=global_ns ):
     if isinstance(sx, str): 
@@ -109,6 +113,20 @@ def codeof( sx, ns=global_ns ):
         assert type_accepts( ret[1], T ), "return type from function does not match declared type" 
         parms = " ".join(map( lambda(l,r):"(%s: %s)"%(nns[l],type_print(r)), args))
         return ("fun %s %s: %s = %s" % (name,parms,type_print(ret[1]),code), None)
+    elif sx[0]=="let":
+        lhs, half, rhs = [],False,[]
+        for part in sx[2:]:
+            if half: rhs.append( part )
+            elif part=="in": half = True
+            else: lhs.append( part )  
+        nns = {}; nns.update(ns)
+        map( lambda(t,T): nns.__setitem__( t, (uuid(),T) ), lhs )
+        code = ""
+        for t,T in [codeof(x,nns) for x in rhs]:
+            if code!="": code += ";"
+            code += t
+        lets = " ".join(map( lambda(l,r):"val %s = %s"%(nns[l],codeof(r)[0]), lhs))
+        return ("let %s in %s end" % (lets,code), T)
     elif sx[0]=="datatype":
         ns[sx[1]] = (sx[1],'type') 
         for cons in sx[2:]:
