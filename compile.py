@@ -34,6 +34,8 @@ global_ns = {
 
     'string': ('string','type'),
     'print string': ('print',['->','string','unit']),
+
+    'list': ('list','type'),
 }
 
 import os
@@ -52,7 +54,7 @@ def type_print( t ):
         return global_ns[t][0]
     elif t[0]=="->": return "("+"->".join(map(type_print,t))+")"
     elif t[0]=="*": return "("+"*".join(map(type_print,t))+")"
-    else: assert False, t
+    else: return "("+" ".join(map(type_print,t))+")"
 def type_apply( l, r ):
     assert isinstance(l,list) and len(l)>=3 and l[0]=="->" and l[1]==r, str(l) + " " + str(r)
     if len(l)==3: return l[2]
@@ -67,12 +69,12 @@ def codeof( sx, ns=global_ns ):
         lhs, ret, rhs = [],[],[]
         for part in sx[2:]:
             if len(ret)>0: rhs.append( part )
-            elif part[0]=="returns": ret.append( part )
+            elif part[0]=="returns": ret = part
             else: lhs.append( part )  
         types = map(lambda (l,r): r, lhs)
-        ns[name+" "+type_print()] = ( uuid(), ['->']+types+[ret[1]] )
+        ns[name+" "+type_print(lhs[0][1])] = ( uuid(), ['->']+types+[ret[1]] )
         nns = {}; nns.update(ns)
-        map( lambda t,T: nns.define( t, (uuid(),T) ), lhs )
+        map( lambda(t,T): nns.__setitem__( t, (uuid(),T) ), lhs )
         code = ""
         for t,T in [codeof(x,nns) for x in rhs]:
             if code!="": code += ";"
