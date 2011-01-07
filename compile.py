@@ -55,7 +55,7 @@ def uuid( n=[0] ):
 def type_accepts( l, r ): return l==r
 def type_print( t ):
     if isinstance(t,str):
-        if t.startswith("'a"): return t
+        if t.startswith("'"): return t
         assert t in global_ns and global_ns[t][1]=='type', t
         return global_ns[t][0]
     elif t[0]=="->": return "("+"->".join(map(type_print,t))+")"
@@ -94,6 +94,7 @@ def type_weaken( t ):
 def codeof( sx, ns=global_ns ):
     if isinstance(sx, str): 
         if re.match("\d+",sx): return (sx,"int")
+        elif re.match('^".*"$',sx): return (sx,"string")
         else: return ns[sx]
     elif sx[0]=="fun":
         name = sx[1]

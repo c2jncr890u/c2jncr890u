@@ -3,7 +3,7 @@
     (Sexpr_list (string list))
 )
 
-(fun sexpr_load (fp: string) (returns Sexpr)
+(fun sexpr_load (fp string) (returns Sexpr)
     (let 
         (stack (ref (:: nil nil)))
         in
