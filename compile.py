@@ -31,6 +31,9 @@ global_ns = {
     '== int': ('(fn a => fn b => a=b)',['->', 'int','int','bool']),
     '!= int': ('(fn a => fn b => not (a=b))',['->', 'int','int','bool']), 
     'print int': ('(General.o (TextIO.print,Int.toString))',['->','int','unit']),
+
+    'string': ('string','type'),
+    'print string': ('print',['->','string','unit']),
 }
 
 import os
@@ -45,11 +48,11 @@ def uuid( n=[0] ):
 def type_accepts( l, r ): return l==r
 def type_print( t ):
     if isinstance(t,str):
-        assert t in global_ns and global_ns[t][1]=='type'
+        assert t in global_ns and global_ns[t][1]=='type', t
         return global_ns[t][0]
     elif t[0]=="->": return "("+"->".join(map(type_print,t))+")"
     elif t[0]=="*": return "("+"*".join(map(type_print,t))+")"
-    else: assert False
+    else: assert False, t
 def type_apply( l, r ):
     assert isinstance(l,list) and len(l)>=3 and l[0]=="->" and l[1]==r, str(l) + " " + str(r)
     if len(l)==3: return l[2]
@@ -77,6 +80,15 @@ def codeof( sx, ns=global_ns ):
         assert type_accepts( ret[1], T ), "return type from function does not match declared type" 
         parms = " ".join(map( lambda(l,r):"(%s: %s)"%(nns[l],type_print(r)), args))
         return ("fun %s %s: %s = %s" % (name,parms,type_print(ret[1]),code), None)
+    elif sx[0]=="datatype":
+        ns[sx[1]] = (sx[1],'type') 
+        for cons in sx[2:]:
+            assert len(cons)==2
+            ns[cons[0]] = (cons[0],['->',cons[1],sx[1]])
+        return ( "datatype %s = %s;" % 
+            (sx[1], ' | '.join([ (cons[0]+" of "+type_print(cons[1])) for cons in sx[2:]]) )
+            , None )
+        
     elif sx[0]==",":
         results = [ codeof(t,ns) for t in sx[1:] ]
         code = '('+ ','.join(map(lambda(l,r):l,results)) +')'
