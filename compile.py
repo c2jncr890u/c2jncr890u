@@ -94,9 +94,9 @@ def codeof( sx, ns=global_ns ):
 if __name__=="__main__":
     if sys.argv[0]=="python": args = sys.argv[2:]
     else: args = sys.argv[1:]
-    assert len(args)==1 and args[0].endswith('.zen')
+    assert len(args)==1 and args[0].endswith('.c2')
     in_file = args[0]
-    out_file = in_file[:-4] + ".sml"
+    out_file = in_file[:-3] + ".sml"
     of = open(out_file,'w')
     for line in sexpr_load(in_file):
         of.write( codeof(line)[0] )

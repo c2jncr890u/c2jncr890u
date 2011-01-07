@@ -1,0 +1,17 @@
+
+(datatype Sexpr
+    (Sexpr_term string)
+    (Sexpr_list (string list))
+)
+(fun sexpr_load (fp: string) (returns Sexpr)
+    (let stack (ref [[]]))
+    (for t (re.findall "\(|\)|[^\s\(\)]+" (file.read fp))) 
+        (if
+            ((== t "(") (.append stack (Sexpr_list [])) )
+            ((== t ")") (.append (.get stack -2) (.pop stack)) )
+            (true (.append (.get stack -1) t)) )
+        )
+        (assert (== (.len stack) 1))
+        (.pop stack)
+    )
+)
