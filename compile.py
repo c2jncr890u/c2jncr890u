@@ -36,6 +36,8 @@ global_ns = {
     'print string': ('print',['->','string','unit']),
 
     'list': ('list','type'),
+    'nil': ('list',["list","'a"]),
+    ":: (list 'a)": ('(fn a => fn b => (a :: b))',["->","'a",["list","'a"],["list","'a"]]),
 }
 
 import os
@@ -50,15 +52,40 @@ def uuid( n=[0] ):
 def type_accepts( l, r ): return l==r
 def type_print( t ):
     if isinstance(t,str):
+        if t.startswith("'a"): return t
         assert t in global_ns and global_ns[t][1]=='type', t
         return global_ns[t][0]
     elif t[0]=="->": return "("+"->".join(map(type_print,t))+")"
     elif t[0]=="*": return "("+"*".join(map(type_print,t))+")"
     else: return "("+" ".join(map(type_print,t))+")"
 def type_apply( l, r ):
-    assert isinstance(l,list) and len(l)>=3 and l[0]=="->" and l[1]==r, str(l) + " " + str(r)
-    if len(l)==3: return l[2]
-    else: return ["->"] + l[2:]
+    assert isinstance(l,list) and len(l)>=3 and l[0]=="->" and type_unify(l[1],r)!=None, str(l) + " " + str(r)
+    if len(l)==3: return type_sub( l[2], type_unify(l[1],r) )
+    else: return type_sub( ["->"] + l[2:], type_unify(l[1],r))
+def type_sub( t, b ):
+    if isinstance(t,list): return [type_sub(x,b) for x in t]
+    if t in b: return b[t]
+    else: return t
+def type_unify( l, r ):
+    if l==r: return {}
+    if isinstance(l,str) and l.startswith("'"):
+        assert not (isinstance(r,str) and r.startswith("'"))
+        return {l: r}
+    if isinstance(r,str) and r.startswith("'"):
+        assert not (isinstance(l,str) and l.startswith("'"))
+        return {r: l}
+    if isinstance(l,list) and isinstance(r,list) and len(l)==len(r):
+        if l[0]!=r[0]: return None
+        d = {}
+        for l,r in zip(l[1:],r[1:]):
+            c = type_unify(l,r)
+            if c==None: return None
+            d.update( c )
+        return d
+def type_weaken( t ):
+    yield t
+    if isinstance(t,list) and len(t)==2:
+        yield [t[0],"'a"]
 
 def codeof( sx, ns=global_ns ):
     if isinstance(sx, str): 
@@ -99,7 +126,14 @@ def codeof( sx, ns=global_ns ):
     elif re.match('#\d+',sx[0]): raise NotImplementedError()
     else:
         hd = sx[0]; tl = tuple(codeof(x,ns) for x in sx[1:])
-        if isinstance(hd,str): hd = ns[hd+" "+type_print(tl[0][1])]
+        if isinstance(hd,str): 
+            for weak in type_weaken(tl[0][1]):
+                try: 
+                    hd = ns[hd+" "+type_print(weak)]
+                    break
+                except KeyError: pass
+            if isinstance(hd,str):
+                raise KeyError("No method matching, %s %s" % (hd,str(tl[0][1])) )
         else: hd = codeof(hd)
         for arg in tl:
             hd = ( "(%s %s)"%(hd[0],arg[0]), type_apply(hd[1],arg[1]) )
