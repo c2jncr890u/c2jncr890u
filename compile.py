@@ -14,33 +14,33 @@ def sexpr_load( fp ):
 
 global_ns = {
     'bool': ('bool', 'type'),
-    'true': ('true', 'bool'),
-    'false': ('false', 'bool'), 
-    'and bool': ('andalso',['->', 'bool','bool','bool']),
+    'true': ('True', 'bool'),
+    'false': ('False', 'bool'), 
+    'and bool': ('(lambda a: lambda b: a and b)',['->', 'bool','bool','bool']),
 
     'int': ('int','type'),
-    '+ int': ('(fn a => fn b => Int.+ (a,b))',['->', 'int','int','int']),
-    '- int': ('(fn a => fn b => Int.- (a,b))',['->', 'int','int','int']),
-    '* int': ('(fn a => fn b => Int.* (a,b))',['->', 'int','int','int']),
-    '/ int': ('(fn a => fn b => Int.div (a,b))',['->', 'int','int','int']),
-    '% int': ('(fn a => fn b => Int.mod (a,b))',['->', 'int','int','int']),
-    '< int': ('(fn a => fn b => Int.< (a,b))',['->', 'int','int','bool']),
-    '<= int': ('(fn a => fn b => Int.<= (a,b))',['->', 'int','int','bool']),
-    '> int': ('(fn a => fn b => Int.> (a,b))',['->', 'int','int','bool']),
-    '>= int': ('(fn a => fn b => Int.>= (a,b))',['->', 'int','int','bool']),
-    '== int': ('(fn a => fn b => a=b)',['->', 'int','int','bool']),
-    '!= int': ('(fn a => fn b => not (a=b))',['->', 'int','int','bool']), 
-    'print int': ('(General.o (TextIO.print,Int.toString))',['->','int','unit']),
+    '+ int': ('(lambda a: lambda b: a + b)',['->', 'int','int','int']),
+    '- int': ('(lambda a: lambda b: a - b)',['->', 'int','int','int']),
+    '* int': ('(lambda a: lambda b: a * b)',['->', 'int','int','int']),
+    '/ int': ('(lambda a: lambda b: a / b)',['->', 'int','int','int']),
+    '% int': ('(lambda a: lambda b: a % b)',['->', 'int','int','int']),
+    '< int': ('(lambda a: lambda b: a < b)',['->', 'int','int','bool']),
+    '<= int': ('(lambda a: lambda b: a <= b)',['->', 'int','int','bool']),
+    '> int': ('(lambda a: lambda b: a > b )',['->', 'int','int','bool']),
+    '>= int': ('(lambda a: lambda b: a >= b)',['->', 'int','int','bool']),
+    '== int': ('(lambda a: lambda b: a==b)',['->', 'int','int','bool']),
+    '!= int': ('(lambda a: lambda b: a!=b)',['->', 'int','int','bool']), 
+    'print int': ('print_function',['->','int','unit']),
 
     'string': ('string','type'),
-    'print string': ('print',['->','string','unit']),
+    'print string': ('print_function',['->','string','unit']),
 
     'list': ('list','type'),
-    'nil': ('list',["list","'a"]),
-    ":: ('a list)": ('(fn a => fn b => (a :: b))',["->","'a",["list","'a"],["list","'a"]]),
+    'nil': ('[]','list'),
+    "cons 'a": ('(lambda a: lambda b: [a]+b)',["->","'a","list","list"]),
 
     "ref": ("ref","type"),
-    "ref 'a": ('ref',['->',"'a",["ref","'a"]]),
+    "ref 'a": ('(lambda a: [a])',['->',"'a",["ref","'a"]]),
 }
 
 import os
