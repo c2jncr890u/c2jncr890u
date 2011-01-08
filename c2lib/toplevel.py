@@ -25,4 +25,12 @@ builtins.define( 'print', 'print_function', ['->','string','unit'] )
 
 builtins.define( 'list', None, 'type')
 builtins.define( '[]', '[]', 'list')
-builtins.define( '+', '(lambda a: lambda b: a+b)',["->",['list',"'a"],['->',["list","'b"],["list",["|","'a","'b"]]]),
+builtins.define( '+', '(lambda a: lambda b: a+b)', 
+    ["->",
+        ['list',"'a"],
+        ['->',
+            ["list","'b"],
+            ["list",["|","'a","'b"]],
+        ],
+    ]
+)
