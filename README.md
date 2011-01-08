@@ -1,6 +1,8 @@
+c2
+==
 
 Top Level
-=========
+---------
     type    : kind
 
     unit    : type unit
@@ -34,7 +36,7 @@ Top Level
 
 
 Module System
-=============
+-------------
 
 Each file is referenced by a URI and given its own namespace. 
 
