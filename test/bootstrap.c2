@@ -6,6 +6,7 @@
 (fun sexpr_load (fp string) (returns Sexpr)
     (let 
         (stack (ref (:: nil nil)))
+        (i (ifile.open fp))
         in
         (map (re.findall "" (file.read fp))
             (fn t
