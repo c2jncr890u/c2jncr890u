@@ -1,4 +1,7 @@
 
+class builtins:
+    def define( self, lhs, repr, rhs ): 
+        raise NotImplementedError()
 
 builtins.define( 'bool', 'bool', 'type' )
 builtins.define( 'true', 'True', 'bool' )
@@ -23,14 +26,6 @@ builtins.define( 'print', 'print_function', ['->','int','unit'] )
 builtins.define( 'string', None, 'type' )
 builtins.define( 'print', 'print_function', ['->','string','unit'] )
 
-builtins.define( 'list', None, 'type')
-builtins.define( '[]', '[]', 'list')
-builtins.define( '+', '(lambda a: lambda b: a+b)', 
-    ["->",
-        ['list',"'a"],
-        ['->',
-            ["list","'b"],
-            ["list",["|","'a","'b"]],
-        ],
-    ]
-)
+builtins.define( 'list', None, 'type' )
+builtins.define( '[]', '[]', 'list' )
+builtins.define( '+', '(lambda a: lambda b: a+b)', ["->",['list',"'a"],['->',["list","'b"],["list",["|","'a","'b"]]]] )

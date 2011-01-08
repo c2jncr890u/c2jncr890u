@@ -50,5 +50,5 @@ Each file is referenced by a URI. No implicit namespace partitioning is performe
 Macro System
 ------------
 
-Hygienic macros will be supported to a limited extent. The major constraint here is that blame tracking needs to be properly threaded through here.  
+Hygienic macros will be supported to a limited extent. The major constraint here is that blame tracking needs to still work.  
 

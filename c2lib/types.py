@@ -1,7 +1,8 @@
 
-def uuid( n=[0] ):
-    n[0] += 1
-    return "us_"+str(n[0])
+"""
+Unify and Simplify, types should have a single unambiguous representation
+ordered 
+"""
 
 def type_accepts( l, r ): return l==r
 def type_print( t ):

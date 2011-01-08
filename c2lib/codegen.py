@@ -1,4 +1,9 @@
 
+def uuid( n=[0] ):
+    n[0] += 1
+    return "us_"+str(n[0])
+
+
 def codeof( sx, ns=global_ns ):
     if isinstance(sx, str): 
         if re.match("\d+",sx): return (sx,"int")
