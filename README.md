@@ -1,54 +1,35 @@
 
-    unit    : type
-    
-    
-    bool    : type
+    type    : kind
+
+    unit    : type unit
+
+    bool    : type bool
     true    : bool
     false   : bool
-    and     : bool -> bool -> bool
-    
-    
-    int     : type
-    +       : int -> int -> int
-    -       : int -> int -> int
-    *       : int -> int -> int
-    /       : int -> int -> int
-    %       : int -> int -> int
-    <       : int -> int -> int
-    <=      : int -> int -> int
-    >       : int -> int -> int
-    >=      : int -> int -> int
-    ==      : int -> int -> int
-    !=      : int -> int -> int
-    print   : int -> int -> int
-    
-    
-    string  : type
+    and     : bool * bool -> bool
+    or      : bool * bool -> bool
+
+    int     : type int
+    +       : int * int -> int
+    -       : int * int -> int
+    *       : int * int -> int
+    /       : int * int -> int
+    %       : int * int -> int
+    <       : int * int -> bool
+    <=      : int * int -> bool
+    >       : int * int -> bool
+    >=      : int * int -> bool
+    ==      : int * int -> bool
+    !=      : int * int -> bool
+
+    string  : type string    
     print   : string -> unit
-    
-    
-    list    : type
-    nil     : list 'a
-    ::      : 'a -> list 'a -> list 'a
-    
-    
-    ref     : type
-    ref 'a  : 'a -> ref 'a
-    
-    
-    ifile       : type
-    ifile.open  : string -> ifile
-    ifile.readAll : ifile -> string
-    ifile.close : ifile -> unit
-    
-    ofile       : type
-    ofile.open  : string -> ofile
-    ofile.writeAll : ofile -> string -> unit
-    ofile.close : ofile -> unit
+
+    list    : type list
+    []      : list
+    cons    : 'a * list 'b -> list ('a | 'b) 
+    +       : list 'a * list 'b -> list ('a | 'b) 
 
 
 
-
-
-
-
+    

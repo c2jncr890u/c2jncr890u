@@ -13,34 +13,7 @@ def sexpr_load( fp ):
     return stack.pop()
 
 global_ns = {
-    'bool': ('bool', 'type'),
-    'true': ('True', 'bool'),
-    'false': ('False', 'bool'), 
-    'and bool': ('(lambda a: lambda b: a and b)',['->', 'bool','bool','bool']),
-
-    'int': ('int','type'),
-    '+ int': ('(lambda a: lambda b: a + b)',['->', 'int','int','int']),
-    '- int': ('(lambda a: lambda b: a - b)',['->', 'int','int','int']),
-    '* int': ('(lambda a: lambda b: a * b)',['->', 'int','int','int']),
-    '/ int': ('(lambda a: lambda b: a / b)',['->', 'int','int','int']),
-    '% int': ('(lambda a: lambda b: a % b)',['->', 'int','int','int']),
-    '< int': ('(lambda a: lambda b: a < b)',['->', 'int','int','bool']),
-    '<= int': ('(lambda a: lambda b: a <= b)',['->', 'int','int','bool']),
-    '> int': ('(lambda a: lambda b: a > b )',['->', 'int','int','bool']),
-    '>= int': ('(lambda a: lambda b: a >= b)',['->', 'int','int','bool']),
-    '== int': ('(lambda a: lambda b: a==b)',['->', 'int','int','bool']),
-    '!= int': ('(lambda a: lambda b: a!=b)',['->', 'int','int','bool']), 
-    'print int': ('print_function',['->','int','unit']),
-
-    'string': ('string','type'),
-    'print string': ('print_function',['->','string','unit']),
-
-    'list': ('list','type'),
-    'nil': ('[]','list'),
-    "cons 'a": ('(lambda a: lambda b: [a]+b)',["->","'a","list","list"]),
-
-    "ref": ("ref","type"),
-    "ref 'a": ('(lambda a: [a])',['->',"'a",["ref","'a"]]),
+    
 }
 
 import os
