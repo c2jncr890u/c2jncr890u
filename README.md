@@ -1,9 +1,14 @@
 c2 programming language
-===========
+=======================
 
+Dynamic languages need a "c" language to unite them. c2 does that with some 
 
-Top Level
----------
++ No Syntax - Symbolic expressions make mechanical input simpler.
++ Any Syntax - Syntax may be supported by adding annotations to each expression. 
++ Value Semantics - Duck is a duck is a duck is a duck.
++ Flexible Type System -  
+
+## Top Level
     type    : kind
 
     unit    : type unit
@@ -36,9 +41,12 @@ Top Level
     +       : list 'a * list 'b -> list ('a | 'b) 
 
 
-Module System
--------------
+## Module System
 
-Each file is referenced by a URI and given its own namespace. 
+Each file is referenced by a URI. No implicit namespace partitioning is performed, though duplicate imports will be eliminated. Circular imports will be found and scolded.
+
+## Macro System
+
+Hygienic macros will be supported to a limited extent. The major constraint here is that blame tracking needs to be properly threaded through here.  
 
     
