@@ -1,10 +1,10 @@
 c2 programming language
 =======================
 
-Dynamic languages need a "c" language to unite them. c2 does that with some 
+Dynamic languages need a "c" language to unite them.
 
 + No Syntax - Symbolic expressions make mechanical input simpler.
-+ Any Syntax - Syntax may be supported by adding annotations to each expression. 
++ Any Syntax - custom syntax + proper blame-tracking is supported through annotated S-expressions. 
 + Value Semantics - Duck is a duck is a duck is a duck.
 + Flexible Type System - Less big words, more simple logic. It helps, not hinders.
 
