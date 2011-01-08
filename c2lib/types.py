@@ -17,9 +17,6 @@ def type_accepts( l, r ):
 
 
 
-
-
-
 #TODO unify, substitute, simplify
 def type_unify( l, r ):
     if l==r: return {}

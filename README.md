@@ -45,7 +45,7 @@ Top Level
 Module System
 -------------
 
-Each file is referenced by a URI. No implicit namespace partitioning is performed, though duplicate imports will be eliminated. Circular imports will be found and scolded.
+Each file is referenced by a URI. No implicit namespace partitioning is performed. Duplicate imports will be ignored. Circular imports will be scolded.
 
 Macro System
 ------------
