@@ -1,4 +1,6 @@
 
+Top Level
+=========
     type    : kind
 
     unit    : type unit
@@ -31,5 +33,9 @@
     +       : list 'a * list 'b -> list ('a | 'b) 
 
 
+Module System
+=============
+
+Each file is referenced by a URI and given its own namespace. 
 
     
